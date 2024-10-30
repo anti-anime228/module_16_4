@@ -36,7 +36,6 @@ async def post_user(
 ) -> str:
     if len(users) == 0:
         user = User(id=1, username=username, age=age)
-
         users.append(user)
     else:
         id = len(users) + 1
@@ -61,44 +60,10 @@ async def update_user(user_id: Annotated[int, Path(ge=1, le=100, description='En
 
 
 
-
-
-
-
-
-
-
 @new_app.delete('/user/{user_id}')
 async def delete_user(user_id: Annotated[int, Path(ge=1, le=100, description='Enter User ID')]) -> User:
-    try:
-        index = -1
-        for user in users:
-            index += 1
-            if user.id == user_id:
-                users.pop(index)
-                return user
-    except IndexError:
-        raise HTTPException(status_code=404, detail="User was not found")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    for i in range(len(users)):
+        if users[i].id == user_id:
+            return users.pop(i)
+    else:
+        raise HTTPException(status_code=404, detail='User was not found')
